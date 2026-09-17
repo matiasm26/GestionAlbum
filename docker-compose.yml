@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: gestion-album-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: gestion_album
+      MYSQL_USER: album_user
+      MYSQL_PASSWORD: album_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ualbum_user", "-palbum_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  mysql_data:

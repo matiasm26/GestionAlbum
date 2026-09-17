@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Album {
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  descripcion String?   @db.Text
+  anio        Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  laminas     Lamina[]
+  auditLogs   AuditLog[]
+
+  @@index([nombre])
+}
+
+model Lamina {
+  id        Int      @id @default(autoincrement())
+  numero    Int
+  nombre    String
+  cantidad  Int      @default(0)
+  imagenUrl String?
+  albumId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  album     Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  auditLogs AuditLog[]
+
+  @@unique([albumId, numero])
+  @@index([albumId, cantidad])
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  accion    String
+  entidad   String
+  entidadId Int
+  datos     Json?
+  createdAt DateTime @default(now())
+  albumId   Int?
+  laminaId  Int?
+  album     Album?   @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  lamina    Lamina?  @relation(fields: [laminaId], references: [id], onDelete: SetNull)
+
+  @@index([entidad, entidadId])
+  @@index([createdAt])
+}
+ 

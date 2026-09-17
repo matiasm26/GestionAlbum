@@ -1,0 +1,22 @@
+import express from 'express';
+import { prisma } from './config/prisma.js';
+import { AlbumRepository } from './repositories/albumRepository.js';
+import { LaminaRepository } from './repositories/laminaRepository.js';
+import { AuditRepository } from './repositories/auditRepository.js';
+import { AlbumService } from './services/albumService.js';
+import { LaminaService } from './services/laminaService.js';
+import { albumController } from './controllers/albumController.js';
+import { laminaController } from './controllers/laminaController.js';
+import { buildRoutes } from './routes/index.js';
+import { errorHandler, notFound } from './middlewares/errorHandler.js';
+
+const albumRepo = new AlbumRepository(prisma);
+const laminaRepo = new LaminaRepository(prisma);
+const auditRepo = new AuditRepository(prisma);
+const app = express();
+app.use(express.json({ limit: '2mb' }));
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.use('/api', buildRoutes(albumController(new AlbumService(albumRepo, auditRepo)), laminaController(new LaminaService(laminaRepo, albumRepo, auditRepo))));
+app.use(notFound);
+app.use(errorHandler);
+export default app;

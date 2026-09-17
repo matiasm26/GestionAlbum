@@ -1,0 +1,21 @@
+{
+  "info": { "name": "Gestión Álbum", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [{"key":"baseUrl","value":"http://localhost:3000"},{"key":"albumId","value":"1"},{"key":"laminaId","value":"1"}],
+  "item": [
+    {"name":"Health","request":{"method":"GET","url":"{{baseUrl}}/health"}},
+    {"name":"List albums","request":{"method":"GET","url":"{{baseUrl}}/api/albums"}},
+    {"name":"Create album","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"nombre\":\"Álbum demo\",\"anio\":2026}"},"url":"{{baseUrl}}/api/albums"}},
+    {"name":"Get album","request":{"method":"GET","url":"{{baseUrl}}/api/albums/{{albumId}}"}},
+    {"name":"Update album","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"descripcion\":\"Actualizado\"}"},"url":"{{baseUrl}}/api/albums/{{albumId}}"}},
+    {"name":"Delete album","request":{"method":"DELETE","url":"{{baseUrl}}/api/albums/{{albumId}}"}},
+    {"name":"List laminas","request":{"method":"GET","url":"{{baseUrl}}/api/albums/{{albumId}}/laminas"}},
+    {"name":"Create lamina","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"numero\":10,\"nombre\":\"Nueva\",\"cantidad\":1,\"imagenUrl\":\"https://example.com/foto.jpg\"}"},"url":"{{baseUrl}}/api/albums/{{albumId}}/laminas"}},
+    {"name":"Bulk laminas","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"laminas\":[{\"numero\":11,\"nombre\":\"Una\",\"cantidad\":0},{\"numero\":12,\"nombre\":\"Dos\",\"cantidad\":2}]}"},"url":"{{baseUrl}}/api/albums/{{albumId}}/laminas/bulk"}},
+    {"name":"Missing laminas","request":{"method":"GET","url":"{{baseUrl}}/api/albums/{{albumId}}/laminas/missing"}},
+    {"name":"Repeated laminas","request":{"method":"GET","url":"{{baseUrl}}/api/albums/{{albumId}}/laminas/repeated"}},
+    {"name":"Get lamina","request":{"method":"GET","url":"{{baseUrl}}/api/laminas/{{laminaId}}"}},
+    {"name":"Update lamina (cantidad + imagen opcional)","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"cantidad\":3,\"imagenUrl\":\"https://example.com/foto-actualizada.jpg\"}"},"url":"{{baseUrl}}/api/laminas/{{laminaId}}"}},
+    {"name":"Delete lamina","request":{"method":"DELETE","url":"{{baseUrl}}/api/laminas/{{laminaId}}"}},
+    {"name":"Validación Zod (400)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"nombre\":\"\"}"},"url":"{{baseUrl}}/api/albums"}}
+  ]
+}
